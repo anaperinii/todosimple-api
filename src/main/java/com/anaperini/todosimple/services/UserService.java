@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anaperini.todosimple.models.User;
-import com.anaperini.todosimple.repositories.TaskRepository;
 import com.anaperini.todosimple.repositories.UserRepository;
 import java.util.Optional;
 import java.lang.RuntimeException;
@@ -15,9 +14,6 @@ public class UserService {
     
     @Autowired
     private UserRepository userRepository;
-    
-    @Autowired
-    private TaskRepository taskRepository;
 
     public User findById(Long id) {
         Optional<User> user = this.userRepository.findById(id);
@@ -27,21 +23,20 @@ public class UserService {
     }
 
     @Transactional
-    public User create(User obj) {
+    public User createUser(User obj) {
         obj.setId(null);
         obj = this.userRepository.save(obj);
-        this.taskRepository.saveAll(obj.getTasks());
         return obj;
     }
 
     @Transactional
-    public User update(User obj) {
+    public User updateUser(User obj) {
         User newObj = findById(obj.getId());
         newObj.setPassword(obj.getPassword());
         return this.userRepository.save(newObj);
     }
 
-    public void delete(Long id) {
+    public void deleteUser(Long id) {
         findById(id);
         try {
             this.userRepository.deleteById(id);

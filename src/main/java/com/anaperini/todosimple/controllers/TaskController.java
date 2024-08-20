@@ -56,7 +56,7 @@ public class TaskController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         this.taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
@@ -66,7 +66,7 @@ public class TaskController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Task>> findAllByUserId(@PathVariable Long userId) {
         userService.findById(userId);
-        List<Task> objs  = this.taskService.findAllByUserId(userId);
+        List<Task> objs = this.taskService.findAllByUserId(userId);
         return ResponseEntity.ok().body(objs);
     }
 }

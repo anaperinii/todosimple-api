@@ -58,7 +58,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
                 request);
         }
 
-    @ExceptionHandler(ObjectNotFoundException.class)
+    @ExceptionHandler(DataIntegrityViolationException.class)
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<Object> handleDataIntegrityViolationException(
         DataIntegrityViolationException dataIntegrityViolationException,

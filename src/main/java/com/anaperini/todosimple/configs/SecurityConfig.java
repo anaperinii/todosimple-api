@@ -19,6 +19,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import com.anaperini.todosimple.security.JWTAuthenticationFilter;
+import com.anaperini.todosimple.security.JWTAuthorizationFilter;
 import com.anaperini.todosimple.security.JWTUtil;
 
 @Configuration
@@ -58,7 +60,13 @@ public class SecurityConfig {
         http.authorizeHttpRequests()
             .antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
             .antMatchers(PUBLIC_MATCHERS).permitAll()
-            .anyRequest().authenticated();
+            .anyRequest().authenticated().and()
+            .authenticationManager(authenticationManager);
+
+        http.addFilter(new JWTAuthenticationFilter(this.authenticationManager, this.jwtUtil));
+        http.addFilter(new JWTAuthorizationFilter(this.authenticationManager, this.jwtUtil,
+                        this.userDetailsService));
+
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 

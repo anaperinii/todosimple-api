@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.anaperini.todosimple.models.User;
+import com.anaperini.todosimple.models.dto.UserCreateDTO;
+import com.anaperini.todosimple.models.dto.UserUpdateDTO;
 import com.anaperini.todosimple.models.enums.ProfileEnum;
 import com.anaperini.todosimple.repositories.UserRepository;
 import com.anaperini.todosimple.security.UserSpringSecurity;
@@ -18,6 +20,8 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import javax.validation.Valid;
 
 @Service
 public class UserService {
@@ -71,6 +75,20 @@ public class UserService {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public User fromDTO(@Valid UserCreateDTO obj) {
+        User user = new User();
+        user.setUsername(obj.getUsername());
+        user.setPassword(obj.getPassword());
+        return user;
+    }
+
+    public User fromDTO(@Valid UserUpdateDTO obj) {
+        User user = new User();
+        user.setId(obj.getId());
+        user.setPassword(obj.getPassword());
+        return user;
     }
 
 }

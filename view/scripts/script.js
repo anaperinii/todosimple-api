@@ -1,4 +1,4 @@
-const url = "http://localhost:8080/task/user/2";
+const tasksEndpoint = "http://localhost:8080/task/user";
 
 function hideLoader() {
     document.getElementById("loading").style.display = "none";
@@ -8,8 +8,6 @@ function show(tasks) {
     let tab = `<thead>
             <th scope = "col">#</th>
             <th scope = "col">Description</th>
-            <th scope = "col">Username</th>
-            <th scope = "col">User Id</th>
         </thead>`;
 
     for (let task of tasks) {
@@ -17,8 +15,6 @@ function show(tasks) {
             <tr>
                 <td scope="row">${task.id}</td>
                 <td>${task.description}</td>
-                <td>${task.user.username}</td>
-                <td>${task.user.id}</td>
             </tr>
         `;
     }
@@ -26,13 +22,24 @@ function show(tasks) {
     document.getElementById("tasks").innerHTML = tab;
 }
 
-async function getAPI(url) {
-    const response =await fetch(url, {method: "GET"});
+async function getTasks() {
+    let key = "Authorization";
+    const response = await fetch(tasksEndpoint, {
+      method: "GET",
+      headers: new Headers({
+        Authorization: localStorage.getItem(key),
+      }),
+    });
+  
     var data = await response.json();
     console.log(data);
-    if(response)
-        hideLoader();
+    if (response) hideLoader();
     show(data);
-}
-
-getAPI(url);
+  }
+  
+  document.addEventListener("DOMContentLoaded", function (event) {
+    if (!localStorage.getItem("Authorization"))
+      window.location = "/view/login.html";
+  });
+  
+  getTasks();
